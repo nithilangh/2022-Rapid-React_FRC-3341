@@ -5,9 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.TeleOpGame;
+import frc.robot.subsystems.BallHandlerSubsystem;
+import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -18,14 +22,22 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  DriveTrainSubsystem _driveTrain = new DriveTrainSubsystem();
+  BallHandlerSubsystem _ballHandler = new BallHandlerSubsystem();
+  LimelightSubsystem _limelight = new LimelightSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  Joystick _joystick1 = new Joystick(Constants.USBOrder.ZERO);
+  Joystick _joystick2 = new Joystick(Constants.USBOrder.ONE);
+
+  TeleOpGame _teleopGame = new TeleOpGame(_driveTrain, _ballHandler, _limelight, _joystick1, _joystick2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
+    SmartDashboard.putString("Status", "Initialized");
     configureButtonBindings();
+
+    _ballHandler.setDefaultCommand(_teleopGame);
   }
 
   /**
@@ -43,6 +55,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
